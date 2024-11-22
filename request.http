@@ -1,0 +1,139 @@
+GET http://localhost:3000/fechas/inscripcion HTTP/1.1
+
+###
+POST http://localhost:3000/fechas HTTP/1.1
+Content-Type: application/json
+
+
+{
+    "modulo": "becas",
+    "evento": "Fechas de inscripcion a becas",
+    "fecha_inicio": "2024-03-01",
+    "fecha_fin": "2024-03-30"
+}
+
+###
+PUT  http://localhost:3000/fechas/3 HTTP/1.1
+Content-Type: application/json
+
+
+{
+    "modulo": "becas",
+    "evento": "Fechas de inscripcion a becas",
+    "fecha_inicio": "2024-03-15",
+    "fecha_fin": "2024-03-30"
+}
+
+###
+GET http://localhost:3000/requisitos_inscripcion HTTP/1.1
+
+###
+POST http://localhost:3000/requisitos_inscripcion HTTP/1.1
+Content-Type: application/json
+
+
+{
+    "documento": "comprobante de domicilio",
+    "descripcion": "Menor a 3 meses de antiguedad"
+}
+
+###
+PUT  http://localhost:3000/requisitos_inscripcion/3 HTTP/1.1
+Content-Type: application/json
+
+
+{
+    "documento": "Comprobante de domicilio",
+    "descripcion": "Menor a 3 meses de antiguedad"
+}
+
+###
+GET http://localhost:3000/proceso_reinscripcion HTTP/1.1 
+
+//Metodo POST
+###
+POST http://localhost:3000/oferta_academica HTTP/1.1
+Content-Type: application/json
+
+{
+    "carrera": "Ingeniería Ambiental",
+    "duracion": "8 semestres",
+    "plantel":["San Lorenzo tezonco","Cuatepec"]
+}
+
+//Metodo PUT
+###
+PUT http://localhost:3000/oferta_academica/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "carrera": "Ingeniería Industrial",
+    "duracion": "10 semestres",
+    "plantel":["San Lorenzo tezonco","Del Valle"]
+}
+
+																			BASE DE DATOS
+{
+    "books": [
+        {
+            "id": 1,
+            "name": "Los 7 habitos de la gente altamente efectiva",
+            "author": "Stephen R. Covey",
+            "year": 1989
+        },
+        {
+            "id": 2,
+            "name": "Padre rico, padre pobre",
+            "author": "Robert Kiyosaki",
+            "year": 1997
+        }
+    ],
+    "proceso_reinscripcion": [
+        {
+            "id": "1",
+            "Paso_1": "Ingresa al sistema estudiantil utilizando tu correo institucional y tu contraseña",
+            "Paso2": "Selecciona Menu principal en la parte superior derecha",
+            "Paso_3": "Seleciona la opción Sistema de Estudiantes dentro del menu Aplicaciones disponibles",
+            "Paso_4": "Selecciona la opción Mis cursos/Reincripcion"
+        }
+    ],
+    "oferta_academica": [
+        {
+            "id": "1",
+            "carrera": "Ingeniería de Software",
+            "duracion": "10 semestres",
+            "plantel": [
+                "San Lorenzo tezonco",
+                "Centro Historico"
+            ]
+        },
+        {
+            "id": 2,
+            "carrera": "Ingeniería Industrial",
+            "duracion": "10 semestres",
+            "plantel": [
+                "San Lorenzo tezonco",
+                "Del Valle"
+            ]
+        }
+    ]
+}
+
+###Lee TODOS LOS ELEMENTOS DEL PLATEL
+GET http://localhost:3000/oferta HTTP/1.1
+###Por id de Plantel
+GET http://localhost:3000/oferta/2 HTTP/1.1
+#####Por nombre de plantel
+GET http://localhost:3000/oferta/plantel/San Lorezo Tezonco HTTP/1.1
+###BUSCA TODAS LAS COINCIDENCIAS QUE ENCUENTRE EN LOS PLANTELES
+GET http://localhost:3000/oferta/platel/Hippies
+
+////////////////////////////////////////////////////////////////////////////
+### BUSCA LOS SERVICIOS POR ID DE PLANTEL
+GET http://localhost:3000/servicios/2 HTTP/1.1
+### BUSCA LOS SERVICIOS POR NOMBRE DEL PLANTEL
+GET http://localhost:3000/servicios/plantel/San Lorezo Tezonco HTTP/1.1
+### BUSCA LAS COINCIDENCIAS DE LOS SERVICIOS 
+GET http://localhost:3000/servicios/planteles/Comedor HTTP/1.1
+###
+GET http://localhost:3000/servicios/general/Comedor HTTP/1.1
