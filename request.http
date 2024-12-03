@@ -6,7 +6,7 @@ Content-Type: application/json
 
 
 {
-    "modulo": "becas",
+    "modulo": "becas2",
     "evento": "Fechas de inscripcion a becas",
     "fecha_inicio": "2024-03-01",
     "fecha_fin": "2024-03-30"
@@ -33,7 +33,7 @@ Content-Type: application/json
 
 
 {
-    "documento": "comprobante de domicilio",
+    "documento": "comprobante de domicilio prueba",
     "descripcion": "Menor a 3 meses de antiguedad"
 }
 

@@ -1,0 +1,83 @@
+{
+  "fechas": [
+    {
+      "id": "1",
+      "modulo": "inscripcion",
+      "evento": "Fechas de inscripcion",
+      "fecha_inicio": "2024-03-01",
+      "fecha_fin": "2024-03-30"
+    },
+    {
+      "id": "2",
+      "modulo": "convocatoria",
+      "evento": "Fechas de convocatoria de nuevo ingreso",
+      "fecha_inicio": "2024-01-01",
+      "fecha_fin": "2024-01-15"
+    },
+    {
+      "id": 3,
+      "modulo": "becas",
+      "evento": "Fechas de inscripcion a becas",
+      "fecha_inicio": "2024-03-15",
+      "fecha_fin": "2024-03-30"
+    },
+    {
+      "id": 4,
+      "modulo": "becas2",
+      "evento": "Fechas de inscripcion a becas",
+      "fecha_inicio": "2024-03-01",
+      "fecha_fin": "2024-03-30"
+    }
+  ],
+  "requisitos_inscripcion": [
+    {
+      "id": "1",
+      "documento": "Acta de nacimiento",
+      "descripcion": "Acta de nacimiento actualizada"
+    },
+    {
+      "id": "2",
+      "documento": "comprobante de estudios",
+      "descripcion": "Acta de nacimiento actualizada"
+    },
+    {
+      "id": 3,
+      "documento": "Comprobante de domicilio",
+      "descripcion": "Menor a 3 meses de antiguedad"
+    },
+    {
+      "id": 4,
+      "documento": "comprobante de domicilio prueba",
+      "descripcion": "Menor a 3 meses de antiguedad"
+    }
+  ],
+  "proceso_reinscripcion": [
+    {
+      "id": "1",
+      "Paso_1": "Ingresa al sistema estudiantil utilizando tu correo institucional y tu contraseña",
+      "Paso2": "Selecciona Menu principal en la parte superior derecha",
+      "Paso_3": "Seleciona la opción Sistema de Estudiantes dentro del menu Aplicaciones disponibles",
+      "Paso_4": "Selecciona la opción Mis cursos/Reincripcion"
+    }
+  ],
+  "oferta_academica": [
+    {
+      "id": "1",
+      "carrera": "Ingeniería de Software",
+      "duracion": "10 semestres",
+      "plantel": [
+        "San Lorenzo tezonco",
+        "Centro Historico"
+      ]
+    },
+    {
+      "id": 2,
+      "carrera": "Ingeniería Industrial",
+      "duracion": "10 semestres",
+      "plantel": [
+        "San Lorenzo tezonco",
+        "Del Valle"
+      ]
+    }
+  ]
+}

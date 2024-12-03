@@ -2,10 +2,9 @@
   "name": "node-api",
   "version": "1.0.0",
   "description": "Api desarrollada en node.js con express",
-  "main": "index.js",
-  "type": "module",
+  "main": "app.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",

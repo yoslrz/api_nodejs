@@ -1,5 +1,5 @@
 //require("express") //importacion de librerias 
-import express from 'express'; //se debe agregar type:module al packjson debajo de main
+/*import express from 'express'; //se debe agregar type:module al packjson debajo de main
 import fs from 'fs'; //permite tranajar con archivos
 import bodyParser from 'body-parser'; // midelwart para interprestar datos
 
@@ -33,46 +33,9 @@ app.get('/',(req ,res)=>{ //res = respuesta y req = request
     res.send("hola") // envio
 });
 
-app.get('/fechas/:modulo',(req ,res) =>{
-    const info =  readData();
-    const modulo = req.params.modulo;
-    const fechas_modulo = info.fechas.find((fechas_modulo)=>fechas_modulo.modulo === modulo);
-    console.log(fechas_modulo)
-    if (fechas_modulo){
-        res.json(fechas_modulo);
-    }else{
-        res.status(404).json({ error: "Módulo inválido" });
-    }
-});
-
-app.post('/fechas',(req ,res) =>{
-    const info = readData();
-    const body = req.body;
-    const nuevo = {
-        id :info.fechas.length +1,//cuenta las fechas y le suma uno para posteriormente agregarlo al body
-        ...body,//agrega el id al body
-    };
-    info.fechas.push(nuevo);
-    writeData(info);
-    res.json(nuevo)
-});
-
-
-app.put('/fechas/:id',(req ,res) =>{
-    const data = readData();
-    const body = req.body;
-    const id = parseInt(req.params.id);
-    const fechaIndex = data.fechas.findIndex((fechas) => fechas.id === id); //busca la fecha por el id
-    data.fechas[fechaIndex] = {
-        ...data.fechas[fechaIndex],
-        ...body,
-    };
-    writeData(data);
-    res.json({ message: "Fecha actualizada con exito" });
-});
 
 /** Rutas de Requistos de inscripcion .........**/
-app.get('/requisitos_inscripcion',(req ,res) =>{
+/**app.get('/requisitos_inscripcion',(req ,res) =>{
     const info =  readData();
     console.log(info)
     const requisitos = info.requisitos_inscripcion;
@@ -112,7 +75,7 @@ app.put('/requisitos_inscripcion/:id',(req ,res) =>{
 });
 
 /** Rutas de  .........**/
-
+/** 
 //MUESTRA LOS DATOS DE DEL JSON DE OFERTA 
 app.get("/oferta", (req, res) => {
     const data = readData();
@@ -210,4 +173,4 @@ app.put("/oferta_academica/:id", (req,res) => {
     };
     writeData(info);
     res.json({message: "Oferta Academica actualizada con exito"});
-});
+});**/
