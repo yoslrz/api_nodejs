@@ -27,6 +27,19 @@
       "evento": "Fechas de inscripcion a becas",
       "fecha_inicio": "2024-03-01",
       "fecha_fin": "2024-03-30"
+    },
+    {
+      "id": 5,
+      "modulo": "becas2",
+      "fecha_inicio": "2024-03-01",
+      "fecha_fin": "2024-03-30"
+    },
+    {
+      "id": 6,
+      "modulo": "becas2",
+      "evento": "dasdsa",
+      "fecha_inicio": "2",
+      "fecha_fin": "2024-03-30"
     }
   ],
   "requisitos_inscripcion": [

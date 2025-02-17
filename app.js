@@ -1,12 +1,9 @@
-//import express from 'express';
-//import bodyParser from 'body-parser';
-//import path  from 'path';
-//import fechasController from './controllers/fechas.js';
 const express = require('express');
 const bodyParser = require('body-parser'); 
 const path = require('path');
 const fechasController = require('./controllers/fechas.js');
 const requisitosController = require('./controllers/requisitosIns.js');
+const ofertaControlleller = require('./controllers/oferta.js')
 const db = require('./config/base_datos.json');
 
 // Crear el servidor express
@@ -23,6 +20,7 @@ app.use(bodyParser.json());
 // Rutas
 app.use('/fechas', fechasController);
 app.use('/requisitos_inscripcion', requisitosController);
+app.use('/oferta', ofertaControlleller);
 
 // Iniciar el servidor
 app.listen(port, () => {

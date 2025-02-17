@@ -2,6 +2,7 @@ const express = require('express');
 const Service = require('../service/services.js'); // Asegúrate de incluir la extensión del archivo
 const serviceInstance = new Service();  // Crea una instancia de la clase Service
 const router = express.Router();
+const { requestFechas } = require('../service/models.js');
 
 // Ruta GET para obtener fechas de los distintos módulos
 router.get('/:modulo', async (req, res) => {
@@ -24,7 +25,18 @@ router.get('/:modulo', async (req, res) => {
 // Ruta POST para agregar una nueva fecha
 router.post('/', async (req, res) => {
     try {
+        const { error, value } = requestFechas.validate(req.body, { abortEarly: false });
+        if (error){
+            return res.status(400).json({
+                error: "Datos inválidos",
+                detalles: error.details.map(det => ({
+                    campo: det.path.join('.'), // Nombre del campo con error
+                    mensaje: det.message       // Mensaje de error de Joi
+                }))
+            });
+        }
         const info = await serviceInstance.readData();  // Lee los datos
+        // falta validar que el modulo no exista 
         const body = req.body;
         const nuevo = {
             id: info.fechas.length + 1,  // Genera un nuevo ID
@@ -34,6 +46,7 @@ router.post('/', async (req, res) => {
         await serviceInstance.writeData(info);  // Escribe los datos actualizados en el archivo
         res.json(nuevo);  // Responde con la nueva fecha
     } catch (error) {
+        console.log(error.name)
         console.error(error);  // Si ocurre un error en la escritura, muestra el error
         res.status(500).json({ error: "Error al agregar la fecha" });  // Responde con error 500
     }
@@ -42,6 +55,16 @@ router.post('/', async (req, res) => {
 // Ruta PUT para actualizar una fecha existente
 router.put('/:id', async (req, res) => {
     try {
+        const { error, value } = requestFechas.validate(req.body, { abortEarly: false });
+        if (error){
+            return res.status(400).json({
+                error: "Datos inválidos",
+                detalles: error.details.map(det => ({
+                    campo: det.path.join('.'), // Nombre del campo con error
+                    mensaje: det.message       // Mensaje de error de Joi
+                }))
+            });
+        }
         const data = await serviceInstance.readData();  // Lee los datos
         const body = req.body;
         const id = parseInt(req.params.id);  // Obtiene el ID de la ruta
