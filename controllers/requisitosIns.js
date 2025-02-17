@@ -43,3 +43,14 @@ router.put('/:id',async(req ,res) =>{
 });
 
 module.exports = router;
+
+const speakOutput = '<speak>Para formar parte de nuestra comunidad deberás atender los siguientes requisitos para la inscripción<break time="0.1s"/>'
++'1<break time="0.1s"/>Cédula de registro como aspirante de la convocatoria a sorteo del año correspondiente<break time="0.1s"/>'
++'2<break time="0.1s"/>Acta de nacimiento en buen estado, legible, sin tachaduras o enmendaduras<break time="0.1s"/>'
++'3<break time="0.1s"/>Identificación oficial vigente <break time="0.1s"/> como Credencial para votar, Pasaporte vigente, cedula profesional con '
++'fotografia<break time="0.1s"/>¡si eres menor de edad!, presenta tu pasaporte o tu credencial del bachillerato confirmas y sellos<break time="0.1s"/>'
++'4<break time="0.1s"/>Comprobante de domicilio del año en curso con fecha de emisión no mayor a 3 meses respecto de la fecha de inscripción, puedes presentar un recibo de telefono'
++'fijo, recibo de agua, gas natural, luz, boleta predial o constancia de recidencia emitida por la alcaldia o municipio correspondiente<break time="0.1s"/>'
++'Por ultimo<break time="0.1s"/> es importante que tomes en cuenta que el nombre completo de la persona titular de los documentos oficiales entregados debe coincidir con el nombre completo'
+        +'de la persona aspirante registrada, de lo contrario, no procedera su inscripción a la U A C M<break time="0.1s"/>'
+        +'Para más información consulte la siguiente liga https://www.u a c m.edu.mx/Aspirantes</speak>'
