@@ -1,8 +1,56 @@
-const express = require('express');
 const Service = require('../service/services.js'); // Asegúrate de incluir la extensión del archivo
+const pool = require('../ConexionDB/DAO.js'); // Incluye la ruta donde se encuentra la conexion a DB
 const serviceInstance = new Service();  // Crea una instancia de la clase Service
+const express = require('express');
 const router = express.Router();
-const { requestFechas } = require('../service/models.js');
+
+router.get('/', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM Fechas;');
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error al ejecutar la consulta:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.delete('/eliminar/:id_fecha', async(req, res) => {
+    const id_fecha = parseInt(req.params.id_fecha);
+    try {
+        await pool.query('DELETE FROM Fechas WHERE id_fecha = $1;', [id_fecha]);
+        res.json({ mensaje: 'Registro eliminado' });
+    } catch (error){
+        console.error('ERROR: Al eliminar el registros a la base de datos.')
+        res.status(500).json({ error: error.message});
+    }
+});
+
+router.put('/agregar/:id', async(req,res) =>{
+    const id_fecha = parseInt(req.params.id);
+    const {fecha_inicio, fecha_fin, evento, fecha_creacion, fecha_edicion, fecha_eliminacion} = req.body;
+    try{
+        const verifica = await pool.query('SELECT * FROM fechas WHERE id_fecha = $1', [id_fecha]);
+        if(verifica.rows.length > 0){
+            await pool.query('UPDATE fechas set fecha_inicio = $1, fecha_fin = $2, evento = $3, fecha_creacion = $4, fecha_edicion = $5, fecha_eliminacion = $6 WHERE id_fecha = $7',
+                [fecha_inicio, fecha_fin, evento, fecha_creacion, fecha_edicion, fecha_eliminacion, id_fecha]
+            );
+            res.json({ mensaje: 'Nota Actualizada'});
+        }else{
+            await pool.query('INSERT INTO Fechas (id_fecha, fecha_inicio, fecha_fin, evento, fecha_creacion, fecha_edicion, fecha_eliminacion) VALUES($1,$2,$3,$4,$5,$6,$7)',
+                [id_fecha ,fecha_inicio, fecha_fin, evento, fecha_creacion, fecha_edicion, fecha_eliminacion]
+            );
+            res.json({mensaje: 'Fecha Registrada'});
+        }
+    }catch (error){
+        res.status(500).json({error: error.message});
+    }
+});
+
+
+
+module.exports = router;
+
+/*
 
 // Ruta GET para obtener fechas de los distintos módulos
 router.get('/:modulo', async (req, res) => {
@@ -25,18 +73,7 @@ router.get('/:modulo', async (req, res) => {
 // Ruta POST para agregar una nueva fecha
 router.post('/', async (req, res) => {
     try {
-        const { error, value } = requestFechas.validate(req.body, { abortEarly: false });
-        if (error){
-            return res.status(400).json({
-                error: "Datos inválidos",
-                detalles: error.details.map(det => ({
-                    campo: det.path.join('.'), // Nombre del campo con error
-                    mensaje: det.message       // Mensaje de error de Joi
-                }))
-            });
-        }
         const info = await serviceInstance.readData();  // Lee los datos
-        // falta validar que el modulo no exista 
         const body = req.body;
         const nuevo = {
             id: info.fechas.length + 1,  // Genera un nuevo ID
@@ -46,7 +83,6 @@ router.post('/', async (req, res) => {
         await serviceInstance.writeData(info);  // Escribe los datos actualizados en el archivo
         res.json(nuevo);  // Responde con la nueva fecha
     } catch (error) {
-        console.log(error.name)
         console.error(error);  // Si ocurre un error en la escritura, muestra el error
         res.status(500).json({ error: "Error al agregar la fecha" });  // Responde con error 500
     }
@@ -55,16 +91,6 @@ router.post('/', async (req, res) => {
 // Ruta PUT para actualizar una fecha existente
 router.put('/:id', async (req, res) => {
     try {
-        const { error, value } = requestFechas.validate(req.body, { abortEarly: false });
-        if (error){
-            return res.status(400).json({
-                error: "Datos inválidos",
-                detalles: error.details.map(det => ({
-                    campo: det.path.join('.'), // Nombre del campo con error
-                    mensaje: det.message       // Mensaje de error de Joi
-                }))
-            });
-        }
         const data = await serviceInstance.readData();  // Lee los datos
         const body = req.body;
         const id = parseInt(req.params.id);  // Obtiene el ID de la ruta
@@ -85,5 +111,5 @@ router.put('/:id', async (req, res) => {
         res.status(500).json({ error: "Error al actualizar la fecha" });  // Responde con error 500
     }
 });
+*/
 
-module.exports = router;
