@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', async(req, res) =>{
     try{
-        const result = await pool.query('SELECT * FROM oferta_academica;')
+        const result = await pool.query("SELECT * FROM oferta_academica WHERE fecha_eliminacion_ofer_academica = 'null';");
         res.json(result.rows);
     }catch (error){
         console.error('Error al ejecutar la consulta: ' ,error);
@@ -15,11 +15,23 @@ router.get('/', async(req, res) =>{
     }
 });
 
+
+router.get('/carreras/:plantel', async (req, res) => {
+    const nom_plantel = req.params.plantel;
+    try {
+        const result = await pool.query("SELECT * FROM oferta_academica WHERE fecha_eliminacion_ofer_academica = 'null' AND plantel_ofer_academica = $1", [nom_plantel]);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error al ejecutar la consulta:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 router.delete('/eliminar/:id', async(req, res) =>{
     const id_ofer_academica = parseInt(req.params.id);
     try{
         await pool.query('DELETE FROM oferta_academica WHERE id_ofer_academica = $1', [id_ofer_academica]);
-        
+        res.json({ mensaje: 'Registro eliminado' });
     }catch(error){res.json({ mensaje: 'Registro eliminado de Oferta Academica' });
         console.error('ERROR: Al eliminar el registro de la base de datos');
         res.status(500).json({error: error.message});
@@ -47,39 +59,27 @@ router.put('/agregar/:id', async(req, res) =>{
     }
 });
 
+router.put('/desactivar/:id', async(req, res) =>{
+    const id_ofer_academica = parseInt(req.params.id);
+    const fecha = new Date();
+    try{
+        const año = fecha.getFullYear();
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const dia = String(fecha.getDate()).padStart(2, '0');
+        const fechaFormateada = `${año}-${mes}-${dia}`;
+        const verifica = await pool.query("SELECT * FROM oferta_academica WHERE id_ofer_academica = $1 and fecha_eliminacion_doc = 'null'; ", [id_ofer_academica]);
+        if(verifica.rows.length > 0){
+            await pool.query('UPDATE oferta_academica SET fecha_eliminacion_ofer_academica = $1 WHERE id_ofer_academica = $2', [fechaFormateada, id_ofer_academica]);
+            res.json({mensaje: 'Oferta Academica Desactivado'});
+        }else{
+            res.json({mensaje: 'El id de la Oferta Academica no existe'});
+        }
+    }catch(error){
+        res.status(500).json({error: error.message});
+    }
+});
+
 module.exports = router;
-/*
-
-//MUESTRA LOS DATOS DE DEL JSON DE OFERTA 
-router.get("/oferta", async (req, res) => {
-    const data = await serviceInstance.readData();
-    res.json(data.oferta);
-});
-
-//BUSCA EL PLANTEL POR ID O NOMBRE
-router.get("/oferta/:id", async (req, res) =>{
-    const data = await serviceInstance.readData();
-    const id = parseInt(req.params.id);
-    const plantel = data.oferta.find((plantel) => plantel.id === id);
-    res.json(plantel);
-});
-router.get("/oferta/plantel/:name", async (req, res) =>{
-    const data = await serviceInstance.readData();
-    const nombre = req.params.name;
-    const plantel = data.oferta.find((plantel) => plantel.name === nombre);
-    res.json(plantel);
-});
-
-//COINCIDENCIA DE CARRERAS QUE SE IMPARTEN EN UNO O VARIOS PLANTELES
-router.get("/oferta/platel/:carrera", async (req, res) => {
-    const data = await serviceInstance.readData();
-    const carreraBuscado = req.params.carrera;
-    const resultados = data.oferta.filter(item => item.Carrera.includes(carreraBuscado));
-    res.json({resultados});
-    console.log('hola esto es una prueba')
-});
-
-*/
 
 
 
