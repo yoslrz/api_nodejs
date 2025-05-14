@@ -1,10 +1,71 @@
-const Service = require('../service/services.js'); // Asegúrate de incluir la extensión del archivo
 const pool = require('../ConexionDB/DAO.js');
-const serviceInstance = new Service();  // Crea una instancia de la clase Service
 const express = require('express');
 const router = express.Router();
+const {obtenerOfertaAcademica, obtenerCarrerasPorPlantel, agregarOActualizarOferta, eliminarCarrera, desactivarOfertaAcademica } = require('../service/services.js');
+
+router.get('/', async (req, res) => {
+    try {
+        const resultados = await obtenerOfertaAcademica();
+        res.json(resultados);
+    } catch (error) {
+        console.error('Error al ejecutar la consulta:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.get('/carreras/:plantel', async (req, res) => {
+    const nom_plantel = req.params.plantel;
+    try {
+        const result = await obtenerCarrerasPorPlantel(nom_plantel);         
+        res.json(result);
+    } catch (error) {
+        console.error('Error al ejecutar la consulta:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 
+
+router.put('/agregar/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    const datos = req.body;
+    try {
+        const resultado = await agregarOActualizarOferta(id, datos);
+        res.json(resultado);
+    } catch (error) {
+        console.error('Error al agregar/actualizar oferta académica:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.delete('/eliminar/:id', async(req, res) =>{
+    const id_ofer_academica = parseInt(req.params.id);
+    try{
+        const resultado = await eliminarCarrera(id_ofer_academica);
+        res.json({ mensaje: 'Registro eliminado' });
+    }catch(error){res.json({ mensaje: 'Registro eliminado de Oferta Academica' });
+        console.error('ERROR: Al eliminar el registro de la base de datos');
+        res.status(500).json({error: error.message});
+    }
+});
+
+router.put('/desactivar/:id', async(req, res) =>{
+    const id_ofer_academica = parseInt(req.params.id);
+    const fecha = new Date();
+    try{
+        const año = fecha.getFullYear();
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const dia = String(fecha.getDate()).padStart(2, '0');
+        const fechaFormateada = `${año}-${mes}-${dia}`;
+        await desactivarOfertaAcademica(id_ofer_academica, fechaFormateada);
+
+    }catch(error){
+        res.status(500).json({error: error.message});
+    }
+});
+
+
+/*
 router.get('/', async(req, res) =>{
     try{
         const result = await pool.query("SELECT * FROM oferta_academica WHERE fecha_eliminacion_ofer_academica = 'null';");
@@ -19,7 +80,8 @@ router.get('/', async(req, res) =>{
 router.get('/carreras/:plantel', async (req, res) => {
     const nom_plantel = req.params.plantel;
     try {
-        const result = await pool.query("SELECT * FROM oferta_academica WHERE fecha_eliminacion_ofer_academica = 'null' AND plantel_ofer_academica = $1", [nom_plantel]);
+        const result = await pool.query("SELECT * FROM oferta_academica WHERE fecha_eliminacion_ofer_academica = 'null' AND plantel_ofer_academica ILIKE '%' || $1 || '%'",[nom_plantel]);
+          
         res.json(result.rows);
     } catch (error) {
         console.error('Error al ejecutar la consulta:', error);
@@ -78,6 +140,7 @@ router.put('/desactivar/:id', async(req, res) =>{
         res.status(500).json({error: error.message});
     }
 });
+*/
 
 module.exports = router;
 
