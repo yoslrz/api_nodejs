@@ -31,14 +31,15 @@
     {
       "id": 5,
       "modulo": "becas2",
+      "evento": "Fechas de inscripcion a becas",
       "fecha_inicio": "2024-03-01",
       "fecha_fin": "2024-03-30"
     },
     {
       "id": 6,
       "modulo": "becas2",
-      "evento": "dasdsa",
-      "fecha_inicio": "2",
+      "evento": "Fechas de inscripcion a becas",
+      "fecha_inicio": "2024-03-01",
       "fecha_fin": "2024-03-30"
     }
   ],
@@ -91,6 +92,65 @@
         "San Lorenzo tezonco",
         "Del Valle"
       ]
+    }
+  ],
+  "oferta": [
+    {
+      "id": 1,
+      "name": "San Lorezo Tezonco",
+      "Carrera": [
+        "Licenciatura en Ingenieria en Software",
+        "Licenciatura en Sistemas Electronicos",
+        "Modelacion Matematica",
+        "Promocion de la Salud",
+        "Hippies"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Centro Historico",
+      "Carrera": [
+        "Promocion de la Salud",
+        "Licenciatura en Ingenieria en Software"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Casa Libertad",
+      "Carrera": [
+        "Modelacion Matematica",
+        "Hippies"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Cuautepec",
+      "Carrera": "Hippies"
+    }
+  ],
+  "servicios": [
+    {
+      "id": 1,
+      "name": "San Lorezo Tezonco",
+      "servicio": [
+        "Comedor",
+        "Estacionamiento"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Centro Historico",
+      "servicio": "Comedor"
+    },
+    {
+      "id": 3,
+      "name": "Casa Libertad",
+      "servicio": "Comedor"
+    },
+    {
+      "id": 4,
+      "name": "Cuautepec",
+      "servicio": "Comedor"
     }
   ]
 }

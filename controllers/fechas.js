@@ -1,88 +1,66 @@
+const pool = require('../ConexionDB/DAO.js'); // Incluye la ruta donde se encuentra la conexion a DB
 const express = require('express');
-const Service = require('../service/services.js'); // Asegúrate de incluir la extensión del archivo
-const serviceInstance = new Service();  // Crea una instancia de la clase Service
 const router = express.Router();
-const { requestFechas } = require('../service/models.js');
+const {obtenerFechas, obtnerFechaEvento, eliminarEvento, agregarOActualizarEvent, desactivarFechas} = require('../service/services.js');
 
-// Ruta GET para obtener fechas de los distintos módulos
-router.get('/:modulo', async (req, res) => {
+
+router.get('/', async (req, res) => {
     try {
-        const info = await serviceInstance.readData();  // Lee los datos de forma asíncrona
-        const modulo = req.params.modulo;
-        const fechas_modulo = info.fechas.find((fechas_modulo) => fechas_modulo.modulo === modulo);  // Busca el módulo
-
-        if (fechas_modulo) {
-            res.json(fechas_modulo);  // Si se encuentra el módulo, responde con los datos
-        } else {
-            res.status(404).json({ error: "Módulo inválido" });  // Si no se encuentra, responde con error 404
-        }
+        const result = await obtenerFechas();
+        res.json(result);
     } catch (error) {
-        console.error(error);  // Si ocurre un error en la lectura, muestra el error
-        res.status(500).json({ error: "Error interno del servidor" });  // Responde con error 500
+        console.error('Error al ejecutar la consulta:', error);
+        res.status(500).json({ error: error.message });
     }
 });
 
-// Ruta POST para agregar una nueva fecha
-router.post('/', async (req, res) => {
+router.get('/evento/:evento', async (req, res) => {
+    const event = req.params.evento;
     try {
-        const { error, value } = requestFechas.validate(req.body, { abortEarly: false });
-        if (error){
-            return res.status(400).json({
-                error: "Datos inválidos",
-                detalles: error.details.map(det => ({
-                    campo: det.path.join('.'), // Nombre del campo con error
-                    mensaje: det.message       // Mensaje de error de Joi
-                }))
-            });
-        }
-        const info = await serviceInstance.readData();  // Lee los datos
-        // falta validar que el modulo no exista 
-        const body = req.body;
-        const nuevo = {
-            id: info.fechas.length + 1,  // Genera un nuevo ID
-            ...body,  // Agrega el cuerpo de la petición a la nueva fecha
-        };
-        info.fechas.push(nuevo);  // Agrega la nueva fecha al array de fechas
-        await serviceInstance.writeData(info);  // Escribe los datos actualizados en el archivo
-        res.json(nuevo);  // Responde con la nueva fecha
+        const result = await obtnerFechaEvento(event);
+        res.json(result);
     } catch (error) {
-        console.log(error.name)
-        console.error(error);  // Si ocurre un error en la escritura, muestra el error
-        res.status(500).json({ error: "Error al agregar la fecha" });  // Responde con error 500
+        console.error('Error al ejecutar la consulta:', error);
+        res.status(500).json({ error: error.message });
     }
 });
 
-// Ruta PUT para actualizar una fecha existente
-router.put('/:id', async (req, res) => {
+
+router.delete('/eliminar/:id', async(req, res) => {
+    const id_fecha = parseInt(req.params.id);
     try {
-        const { error, value } = requestFechas.validate(req.body, { abortEarly: false });
-        if (error){
-            return res.status(400).json({
-                error: "Datos inválidos",
-                detalles: error.details.map(det => ({
-                    campo: det.path.join('.'), // Nombre del campo con error
-                    mensaje: det.message       // Mensaje de error de Joi
-                }))
-            });
-        }
-        const data = await serviceInstance.readData();  // Lee los datos
-        const body = req.body;
-        const id = parseInt(req.params.id);  // Obtiene el ID de la ruta
-        const fechaIndex = data.fechas.findIndex((fechas) => fechas.id === id);  // Busca el índice de la fecha por el ID
+        const resultado = await eliminarEvento(id_fecha);
+        res.json({ mensaje: 'Registro eliminado' });
+    } catch (error){
+        console.error('ERROR: Al eliminar el registros a la base de datos.')
+        res.status(500).json({ error: error.message});
+    }
+});
 
-        if (fechaIndex === -1) {
-            return res.status(404).json({ error: "Fecha no encontrada" });  // Si no se encuentra la fecha, responde con error 404
-        }
+router.put('/agregar/:id', async(req,res) =>{
+    const id_fecha = parseInt(req.params.id);
+    const datos = req.body;
+    try{
+        const resultado = await agregarOActualizarEvent(id_fecha, datos);
+        res.json(resultado);
+    }catch (error){
+        console.error('Error al agregar/actualizar fecha de Evento:', error);
+        res.status(500).json({error: error.message});
+    }
+});
 
-        data.fechas[fechaIndex] = {  // Actualiza la fecha encontrada
-            ...data.fechas[fechaIndex],
-            ...body,
-        };
-        await serviceInstance.writeData(data);  // Escribe los datos actualizados
-        res.json({ message: "Fecha actualizada con éxito" });  // Responde con éxito
-    } catch (error) {
-        console.error(error);  // Si ocurre un error, muestra el error
-        res.status(500).json({ error: "Error al actualizar la fecha" });  // Responde con error 500
+router.put('/desactivar/:id', async(req, res) =>{
+    const id_fecha = parseInt(req.params.id);
+    const fecha = new Date();
+    try{
+        const año = fecha.getFullYear();
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const dia = String(fecha.getDate()).padStart(2, '0');
+        const fechaFormateada = `${año}-${mes}-${dia}`;
+        await desactivarFechas(id_fecha, fechaFormateada)
+        res.json(fechaFormateada);
+    }catch(error){
+        res.status(500).json({error: error.message});
     }
 });
 
