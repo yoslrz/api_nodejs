@@ -1,7 +1,12 @@
 const pool = require('../ConexionDB/DAO.js');
 const express = require('express');
 const router = express.Router();
-const {obtenerOfertaAcademica, obtenerCarrerasPorPlantel, agregarOActualizarOferta, eliminarCarrera, desactivarOfertaAcademica } = require('../service/services.js');
+const {obtenerOfertaAcademica,
+    obtenerCarrerasPorPlantel,
+    agregarOActualizarOferta,
+    eliminarCarrera,
+    desactivarOfertaAcademica,
+    obtenerPosgradosPorPlantel } = require('../service/services.js');
 
 router.get('/', async (req, res) => {
     try {
@@ -24,6 +29,17 @@ router.get('/carreras/:plantel', async (req, res) => {
     }
 });
 
+
+router.get('/posgrados/:plantel', async (req, res) => {
+    const nom_plantel = req.params.plantel;
+    try {
+        const result = await obtenerPosgradosPorPlantel(nom_plantel);         
+        res.json(result);
+    } catch (error) {
+        console.error('Error al ejecutar la consulta:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 
 router.put('/agregar/:id', async (req, res) => {

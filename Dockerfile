@@ -22,6 +22,9 @@ COPY . .
 EXPOSE 3000
 # Declara el puerto 3000, donde la aplicación escuchará las solicitudes.
 
-# Comando para iniciar la aplicación
-CMD ["node", "app.js"]
+# Copia también el .env al contenedor
+COPY .env . 
+
+CMD ["sh", "-c", "node init.js && node app.js"]
+
 # Define el comando que se ejecutará al iniciar el contenedor.

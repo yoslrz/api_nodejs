@@ -1,15 +1,25 @@
-const pool = require('../ConexionDB/DAO.js');
+const { pool } = require('../ConexionDB/DAO.js');
 
 const obtenerOfertaAcademica = async () => {
-    const query = "SELECT * FROM oferta_academica WHERE fecha_eliminacion_ofer_academica = 'null';";
+    const query = "SELECT * FROM oferta_academica WHERE fecha_eliminacion IS NULL";
     const result = await pool.query(query);
     return result.rows;
 };
 
 const obtenerCarrerasPorPlantel = async (nom_plantel) => {
     const query = `SELECT * FROM oferta_academica 
-        WHERE fecha_eliminacion_ofer_academica = 'null' 
-        AND plantel_ofer_academica ILIKE '%' || $1 || '%';`;
+        WHERE fecha_eliminacion IS NULL 
+        AND plantel ILIKE '%' || $1 || '%';`;
+    const result = await pool.query(query, [nom_plantel]);
+    return result.rows;
+};
+
+
+const obtenerPosgradosPorPlantel = async (nom_plantel) => {
+    const query = `SELECT * FROM oferta_academica 
+        WHERE fecha_eliminacion IS NULL
+        AND tipo = 'Posgrado' 
+        AND plantel ILIKE '%' || $1 || '%';`;
     const result = await pool.query(query, [nom_plantel]);
     return result.rows;
 };
@@ -183,5 +193,6 @@ module.exports = {
     desactivarFechas,
     obtenerServicios,
     agregarOActualizarServicios,
-    descativarServicios
+    descativarServicios,
+    obtenerPosgradosPorPlantel
 };
