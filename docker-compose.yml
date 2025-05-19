@@ -1,65 +1,48 @@
 services:
   app:
-    # Configuración para el contenedor de la aplicación Node.js
     build:
       context: .
       dockerfile: Dockerfile
-      # Construye la imagen desde el `Dockerfile` en el contexto actual.
     container_name: c-producto-app-prueba
-    # Asigna un nombre personalizado al contenedor de la aplicación.
     ports:
       - "5000:3000"
-      # Mapea el puerto 3000 del contenedor al puerto 5000 del host.
+    restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      - NODE_ENV=production
-      - DB_HOST=postgres
-      - DB_USER=web
-      - DB_PASSWORD=web123456
-      - DB_NAME=web-dbase
-      # Define las variables de entorno necesarias para la conexión con PostgreSQL.
+      - DOCKER_ENV=true 
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-      # Monta el código fuente del host al contenedor, excluyendo `node_modules`.
     depends_on:
       postgres:
         condition: service_healthy
-        # Garantiza que el contenedor PostgreSQL esté saludable antes de iniciar la aplicación.
     networks:
       - postgres_net
-      # Conecta la aplicación a la red definida en `postgres_network`.
 
   postgres:
-    # Configuración para el contenedor de la base de datos PostgreSQL
     image: postgres:15
-    # Usa la imagen oficial de PostgreSQL (versión 15 en este caso).
     container_name: c-postgres-container
-    # Asigna un nombre personalizado al contenedor de PostgreSQL.
+    env_file:
+      - .env
     environment:
-      POSTGRES_USER: web
-      POSTGRES_PASSWORD: web123456
-      POSTGRES_DB: web-dbase
-      # Define las credenciales y la configuración inicial de la base de datos.
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - "5432:5432"
-      # Mapea el puerto 5432 del contenedor al puerto 5432 del host.
+    restart: unless-stopped
     volumes:
       - postgres_dt:/var/lib/postgresql/data
-      # Asigna un volumen persistente para almacenar los datos de la base de datos.
     networks:
       - postgres_net
-      # Conecta PostgreSQL a la red `postgres_net`.
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U web"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
       interval: 10s
       timeout: 5s
       retries: 3
-      # Verifica periódicamente que el servicio PostgreSQL esté activo.
-
 volumes:
   postgres_dt:
-  # Define un volumen persistente para los datos de PostgreSQL.
 
 networks:
   postgres_net:
-  # Define una red virtual para la comunicación entre servicios.

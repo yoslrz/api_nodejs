@@ -3,15 +3,17 @@ const port = 3000;
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser'); 
-const db = require('./config/base_datos.json');
-const app = express();
+// const db = require('./config/base_datos.json');
 const fechasController = require('./controllers/fechas.js');
 const ofertaControlleller = require('./controllers/oferta.js');
 const requisitosController = require('./controllers/requisitosIns.js');
 
 const fechasRoutes = require('./controllers/fechas.js');
 const ofertaAcaRoutes = require('./controllers/oferta.js');
+const documentacionRouter = require('./controllers/requisitosIns.js')
+const serviciosRouter = require('./controllers/servicios.js')
 
+const app = express();
 
 // Inicia el servidor
 app.use(bodyParser.json())
@@ -27,6 +29,9 @@ app.use('/oferta', ofertaControlleller);
 
 app.use('/api/fechasDB', fechasRoutes);
 app.use('/api/ofertaAcademicaBD', ofertaAcaRoutes);
+app.use('/api/documentosDB',documentacionRouter);
+app.use('/api/serviciosDB',serviciosRouter);
+
 
 // Iniciar el servidor
 app.listen(port, () => {

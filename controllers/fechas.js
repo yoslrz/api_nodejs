@@ -1,7 +1,8 @@
 const pool = require('../ConexionDB/DAO.js'); // Incluye la ruta donde se encuentra la conexion a DB
 const express = require('express');
 const router = express.Router();
-const {obtenerFechas, obtnerFechaEvento, eliminarEvento, agregarOActualizarEvent, desactivarFechas} = require('../service/services.js');
+const {obtenerFechas, obtnerFechaEvento, eliminarEvento, agregarFecha, editarFecha} = require('../service/fechas.js');
+const { requestFechas } = require('../service/models.js')
 
 
 router.get('/', async (req, res) => {
@@ -26,8 +27,8 @@ router.get('/evento/:evento', async (req, res) => {
 });
 
 
-router.delete('/eliminar/:id', async(req, res) => {
-    const id_fecha = parseInt(req.params.id);
+router.delete('/:id', async(req, res) => {
+    const id_fecha = req.params.id;
     try {
         const resultado = await eliminarEvento(id_fecha);
         res.json({ mensaje: 'Registro eliminado' });
@@ -37,31 +38,41 @@ router.delete('/eliminar/:id', async(req, res) => {
     }
 });
 
-router.put('/agregar/:id', async(req,res) =>{
-    const id_fecha = parseInt(req.params.id);
-    const datos = req.body;
-    try{
-        const resultado = await agregarOActualizarEvent(id_fecha, datos);
-        res.json(resultado);
-    }catch (error){
-        console.error('Error al agregar/actualizar fecha de Evento:', error);
-        res.status(500).json({error: error.message});
-    }
+router.post('/', async (req, res) => {
+  const { error, value } = requestFechas.validate(req.body);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+
+  try {
+    const nuevaFecha = await agregarFecha(value);
+    res.status(201).json(nuevaFecha);
+  } catch (err) {
+    console.error('Error al crear fecha:', err);
+    res.status(400).json({ error: err.message }); 
+  }
 });
 
-router.put('/desactivar/:id', async(req, res) =>{
-    const id_fecha = parseInt(req.params.id);
-    const fecha = new Date();
-    try{
-        const año = fecha.getFullYear();
-        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-        const dia = String(fecha.getDate()).padStart(2, '0');
-        const fechaFormateada = `${año}-${mes}-${dia}`;
-        await desactivarFechas(id_fecha, fechaFormateada)
-        res.json(fechaFormateada);
-    }catch(error){
-        res.status(500).json({error: error.message});
-    }
+
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { error, value } = requestFechas.validate(req.body);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+
+  try {
+    const nuevaFecha = await editarFecha(id, value);
+    res.status(201).json(nuevaFecha);
+  } catch (err) {
+    console.error('Error al editar fecha:', err);
+    res.status(400).json({ error: err.message }); 
+  }
 });
+
+
 
 module.exports = router;
