@@ -12,13 +12,14 @@ services:
     environment:
       - DOCKER_ENV=true 
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./node_modules:/usr/src/app/node_modules
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - postgres_net
+    command: ["sh", "./start.sh"]
+
 
   postgres:
     image: postgres:15

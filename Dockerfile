@@ -25,6 +25,8 @@ EXPOSE 3000
 # Copia también el .env al contenedor
 COPY .env . 
 
-CMD ["sh", "-c", "node init.js && node app.js"]
+# Usa un script de arranque para mayor claridad y flexibilidad
+RUN chmod +x ./start.sh
 
-# Define el comando que se ejecutará al iniciar el contenedor.
+CMD ["./start.sh"]
+
