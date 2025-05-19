@@ -6,6 +6,7 @@ services:
     container_name: c-producto-app-prueba
     ports:
       - "5000:3000"
+    restart: unless-stopped
     env_file:
       - .env
     environment:
@@ -30,6 +31,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - "5432:5432"
+    restart: unless-stopped
     volumes:
       - postgres_dt:/var/lib/postgresql/data
     networks:
