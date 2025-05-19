@@ -10,6 +10,8 @@ const requisitosController = require('./controllers/requisitosIns.js');
 
 const fechasRoutes = require('./controllers/fechas.js');
 const ofertaAcaRoutes = require('./controllers/oferta.js');
+const documentacionRouter = require('./controllers/requisitosIns.js')
+const serviciosRouter = require('./controllers/servicios.js')
 
 const app = express();
 
@@ -27,6 +29,9 @@ app.use('/oferta', ofertaControlleller);
 
 app.use('/api/fechasDB', fechasRoutes);
 app.use('/api/ofertaAcademicaBD', ofertaAcaRoutes);
+app.use('/api/documentosDB',documentacionRouter);
+app.use('/api/serviciosDB',serviciosRouter);
+
 
 // Iniciar el servidor
 app.listen(port, () => {

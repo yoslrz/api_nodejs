@@ -40,11 +40,12 @@ const editarDocumentacion = async (id, docNuevo) => {
       SELECT * FROM Documentacion
       WHERE LOWER(nombre) = LOWER($1)
       AND LOWER(evento) = LOWER($2)
+      AND id != $3
       AND fecha_eliminacion IS NULL
       LIMIT 1;
   `;
 
-  const checkResult = await pool.query(checkQuery, [nombre, evento]);
+  const checkResult = await pool.query(checkQuery, [nombre, evento, id]);
 
   if (checkResult.rows.length > 0) {
       throw new Error('Ya existe una documentación registrada con ese nombre para el evento.');

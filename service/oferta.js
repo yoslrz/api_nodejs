@@ -76,10 +76,11 @@ const editarOfertaAcademica = async (id, oferta) => {
     const checkQuery = `
         SELECT * FROM Oferta_Academica
         WHERE LOWER(nombre) = LOWER($1)
+        AND id != $2
         AND fecha_eliminacion IS NULL
         LIMIT 1;
     `;
-    const checkResult = await pool.query(checkQuery, [nombre]);
+    const checkResult = await pool.query(checkQuery, [nombre, id]);
 
     if (checkResult.rows.length > 0) {
         // Ya existe una oferta con ese nombre
