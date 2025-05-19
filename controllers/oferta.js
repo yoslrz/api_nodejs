@@ -84,7 +84,7 @@ router.put('/:id', async (req, res) => {
 });
 
 
-router.delete('/eliminar/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const id_ofer_academica = req.params.id;
   try {
     const resultado = await eliminarCarrera(id_ofer_academica);

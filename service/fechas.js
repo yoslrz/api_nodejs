@@ -31,6 +31,18 @@ const eliminarEvento = async (id_fecha) => {
 const agregarFecha = async (fecha) => {
   const { id = uuidv4(), fecha_inicio, fecha_fin, evento } = fecha;
 
+  const checkQuery = `
+        SELECT * FROM Fechas
+        WHERE LOWER(evento) = LOWER($1)
+        AND fecha_eliminacion IS NULL
+        LIMIT 1;
+        `;
+    const checkResult = await pool.query(checkQuery, [evento]);
+
+    if (checkResult.rows.length > 0) {
+        throw new Error('Ya existe una fecha registrada para el evento');
+    }
+
   const query = `
     INSERT INTO Fechas (id, fecha_inicio, fecha_fin, evento, fecha_edicion, fecha_eliminacion)
     VALUES ($1, $2, $3, $4, NULL, NULL)
