@@ -2,7 +2,7 @@ const Service = require('../service/services.js');
 const pool = require('../ConexionDB/DAO.js');
 const express = require('express');
 const router = express.Router();
-const{obtenerServicios, agregarOActualizarServicios, descativarServicios} = require('../service/services.js');
+const{obtenerServicios, descativarServicios} = require('../service/servicios.js');
 
 
 router.get('/', async(req, res) =>{

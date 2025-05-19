@@ -1,7 +1,7 @@
 const pool = require('../ConexionDB/DAO.js'); // Incluye la ruta donde se encuentra la conexion a DB
 const express = require('express');
 const router = express.Router();
-const {obtenerFechas, obtnerFechaEvento, eliminarEvento, agregarOActualizarEvent, desactivarFechas} = require('../service/services.js');
+const {obtenerFechas, obtnerFechaEvento, eliminarEvento} = require('../service/fechas.js');
 
 
 router.get('/', async (req, res) => {
@@ -35,6 +35,11 @@ router.delete('/eliminar/:id', async(req, res) => {
         console.error('ERROR: Al eliminar el registros a la base de datos.')
         res.status(500).json({ error: error.message});
     }
+});
+
+
+router.post('/', async(req,res) =>{
+
 });
 
 router.put('/agregar/:id', async(req,res) =>{

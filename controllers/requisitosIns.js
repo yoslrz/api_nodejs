@@ -3,7 +3,7 @@ const pool = require('../ConexionDB/DAO.js');
 const express = require('express');
 const router = express.Router();
 
-const{obtenerDocumentos, agregarOActualizarDocumentos, descativarDocumentos} = require('../service/services.js');
+const{obtenerDocumentos} = require('../service/requisitos.js');
 
 
 router.get('/', async(req, res) =>{
